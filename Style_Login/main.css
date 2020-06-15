@@ -1,0 +1,78 @@
+html {
+    font-size: 15px;
+}
+
+body {
+    margin: 0;
+    font-family: Helvetica;
+    background-color: lightgreen;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+}
+
+.row {
+    width: 400px;
+    margin: .6rem 0;
+    position: relative;
+}
+
+.row input {
+    font-size: 1rem;
+    border: 1px solid darkgrey;;
+    border-radius: 4px;
+    padding: .8rem 1rem;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, .25);
+    width: 100%;
+    box-sizing: border-box;
+    color: black;
+    outline: none;
+    transition: all ease-in-out .2s;
+}
+
+.row label {
+    position: absolute;
+    left: 1rem;
+    top: .8rem;
+    color: #cccccc;
+    transition: all ease-in-out .2s;
+}
+
+h2 {
+    font-size: 2rem;
+    letter-spacing: .1rem;
+    margin-bottom: 2rem;
+}
+
+.row input:focus {
+    border: 1px solid black;
+}
+
+.row input:focus + label {
+    transform: translateX(calc(-100% - 2.5rem));
+    color: black;
+}
+
+input:not(:focus):not(:placeholder-shown) + label {
+    color: rgba(0, 0, 0, 0);
+}
+
+.row button {
+    border: none;
+    background: none;
+    position: absolute;
+    top: calc(50% + 1px);
+    transform: translateY(-50%);
+    right: calc(.5rem + 1px);
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    display: none;
+}
+
+.row input[type="password"]:not(:placeholder-shown) ~ button {
+    display: inline-block;
+}
