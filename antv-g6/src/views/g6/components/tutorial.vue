@@ -17,6 +17,10 @@ export default {
       version: G6.Global.version,
       graph: null,
       graphData: {
+        nodes: [],
+        edges: [],
+      },
+      mock: {
         nodes: [
           { id: 'node1', x: 100, y: 200, label: 'Source', },
           { id: 'node2', x: 300, y: 200, label: 'Target', },
@@ -27,18 +31,35 @@ export default {
       },
     }
   },
-  created() {
+  async created() {
   },
-  mounted() {
+  async mounted() {
+    await this.dataLoad()
     this.graphInit()
   },
   methods: {
+    async dataLoad() {
+      let url = 'https://gw.alipayobjects.com/os/basement_prod/6cae02ab-4c29-44b2-b1fd-4005688febcb.json'
+      const res = await fetch(url)
+      const data = await res.json()
+      const { nodes, edges } = data
+
+      // console.log('--->nodes: ', nodes)
+      // console.log('--->edges: ', edges)
+
+      this.graphData.nodes = nodes
+      this.graphData.edges = edges
+
+      // console.log('--->dataLoad: graphData: ', JSON.stringify(this.graphData))
+    },
     graphInit() {
       this.graph = new G6.Graph({
         container: 'box',
         width: 500,
         height: 500,
       })
+
+      // console.log('--->graphInit: graphData: ', JSON.stringify(this.graphData))
 
       this.graph.data(this.graphData)  // 加载数据
       this.graph.render()  // 渲染数据
