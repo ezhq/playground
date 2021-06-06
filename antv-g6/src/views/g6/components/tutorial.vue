@@ -107,6 +107,7 @@ export default {
         edge.style.stroke = 'grey'
       })
 
+      // 数据
       this.graphData.nodes = nodes
       this.graphData.edges = edges
     },
