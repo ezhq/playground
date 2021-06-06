@@ -16,18 +16,47 @@ export default {
     return {
       version: G6.Global.version,
       graph: null,
+      config: {
+        node: {
+          size: 30,  // 大小
+
+          style: {
+            fill: 'steelblue',
+            stroke: '#666',
+            lineWidth: 1,
+          },
+
+          labelCfg: {
+            style: {
+              fill: '#fff',
+            },
+          },
+        },
+
+        edge: {
+          // style: {
+          //   opacity: 0.6,
+          //   stroke: 'grey'
+          // },
+          labelCfg: {
+            autoRotate: true,
+          }
+        },
+      },
       graphData: {
         nodes: [],
         edges: [],
       },
       mock: {
-        nodes: [
-          { id: 'node1', x: 100, y: 200, label: 'Source', },
-          { id: 'node2', x: 300, y: 200, label: 'Target', },
-        ],
-        edges: [
-          { source: 'node1', target: 'node2', label: 'Link', },
-        ],
+        graphConfig: {
+          nodes: {},
+          edges: {},
+        },
+        graphData: {
+          nodes: [],
+          edges: [],
+        },
+
       },
     }
   },
@@ -39,10 +68,44 @@ export default {
   },
   methods: {
     async dataLoad() {
+      // 数据
       let url = 'https://gw.alipayobjects.com/os/basement_prod/6cae02ab-4c29-44b2-b1fd-4005688febcb.json'
       const res = await fetch(url)
       const data = await res.json()
       const { nodes, edges } = data
+      console.log('--->dataLoad: nodes: ', nodes)
+
+      // 节点样式
+      nodes.forEach(node => {
+        if (!node.style) {
+          node.style = {}
+        }
+
+        switch (node.class) {
+          case 'c0':
+            node.type = 'circle'
+            break
+          case 'c1':
+            node.type = 'rect'
+            node.size = [35, 20]
+            break
+          case 'c2':
+            node.type = 'ellipse'
+            node.size = [35, 20]
+            break
+        }
+      })
+
+      // 边线样式
+      edges.forEach(edge => {
+        if (!edge.style) {
+          edge.style = {}
+        }
+
+        edge.style.lineWidth = edge.weight
+        edge.style.opacity = 0.6
+        edge.style.stroke = 'grey'
+      })
 
       this.graphData.nodes = nodes
       this.graphData.edges = edges
@@ -54,11 +117,16 @@ export default {
         height: 800,
 
         fitView: true,
-        fitViewPadding: [20, 40, 50, 20]
+        fitViewPadding: [20, 40, 50, 20],
+
+        defaultNode: this.config.node,
+        defaultEdge: this.config.edge,
       })
 
-      this.graph.data(this.graphData)  // 加载数据
-      this.graph.render()  // 渲染数据
+      // 加载
+      this.graph.data(this.graphData)
+      // 渲染
+      this.graph.render()
     },
   },
 }
