@@ -44,22 +44,18 @@ export default {
       const data = await res.json()
       const { nodes, edges } = data
 
-      // console.log('--->nodes: ', nodes)
-      // console.log('--->edges: ', edges)
-
       this.graphData.nodes = nodes
       this.graphData.edges = edges
-
-      // console.log('--->dataLoad: graphData: ', JSON.stringify(this.graphData))
     },
     graphInit() {
       this.graph = new G6.Graph({
         container: 'box',
-        width: 500,
-        height: 500,
-      })
+        width: 1000,
+        height: 800,
 
-      // console.log('--->graphInit: graphData: ', JSON.stringify(this.graphData))
+        fitView: true,
+        fitViewPadding: [20, 40, 50, 20]
+      })
 
       this.graph.data(this.graphData)  // 加载数据
       this.graph.render()  // 渲染数据
