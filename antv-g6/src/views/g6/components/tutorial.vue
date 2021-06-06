@@ -57,7 +57,13 @@ export default {
 
         // 交互
         modes: {
-          default: ['drag-canvas', 'zoom-canvas', 'drag-node'], // 默认模式
+          default: ['drag-canvas', 'zoom-canvas', 'drag-node', {
+            type: 'tooltip',
+            formatText(model) {
+              const text = 'label: ' + model.label + '<br/>class: ' + model.class
+              return text
+            },
+          },], // 默认模式
           edit: [], // 编辑模式
         },
 
@@ -85,7 +91,7 @@ export default {
           className: 'minimap',
           type: 'delegate',
         },
-        imageMinimap:{
+        imageMinimap: {
           width: 200,
           graphImg: 'https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*eD7nT6tmYgAAAAAAAAAAAABkARQnAQ',
         },
@@ -182,8 +188,8 @@ export default {
         edgeStateStyles: this.config.edgeState,
         // 插件
         plugins: [
-            this.minimap,
-            // this.imageMinimap
+          this.minimap,
+          // this.imageMinimap
         ]
 
       })
@@ -211,7 +217,7 @@ export default {
         this.graph.setItemState(node, 'click', true)
       })
       // 鼠标点击边
-      this.graph.on('edge:click', e=>{
+      this.graph.on('edge:click', e => {
         const edges = this.graph.findAllByState('edge', 'click')
         edges.forEach(item => this.graph.setItemState(item, 'click', false))
         const edge = e.item
@@ -224,8 +230,17 @@ export default {
   },
 }
 </script>
-<style scoped>
+<style>
 #box {
   border: 1px solid gray;
+}
+.g6-tooltip {
+  border: 1px solid #e2e2e2;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #545454;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px 8px;
+  box-shadow: rgba(174, 174, 174) 0px 0px 10px;
 }
 </style>
