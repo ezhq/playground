@@ -17,6 +17,7 @@ export default {
       version: G6.Global.version,
       graph: null,
       config: {
+        // 节点
         node: {
           size: 30,  // 大小
 
@@ -33,6 +34,7 @@ export default {
           },
         },
 
+        // 边
         edge: {
           // style: {
           //   opacity: 0.6,
@@ -41,6 +43,14 @@ export default {
           labelCfg: {
             autoRotate: true,
           }
+        },
+
+        // 布局
+        layout: {
+          type: 'force',  // force:力导向 ，默认 random
+          preventOverlap: true,  // 防止节点重叠
+          // nodeSize: 30,  // 节点大小，未设置节点时候设置此项防止重叠
+          linkDistance: 100, // 边长度
         },
       },
       graphData: {
@@ -117,9 +127,10 @@ export default {
         width: 1000,
         height: 800,
 
-        fitView: true,
-        fitViewPadding: [20, 40, 50, 20],
-
+        // 布局
+        // fitView: true,
+        // fitViewPadding: [20, 40, 50, 20],
+        layout: this.config.layout, // 布局配置，执行 render() 时候进行计算
         defaultNode: this.config.node,
         defaultEdge: this.config.edge,
       })
