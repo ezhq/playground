@@ -16,6 +16,7 @@ export default {
     return {
       version: G6.Global.version,
       graph: null,
+      minimap: null,
       config: {
         // 节点
         node: {
@@ -75,7 +76,14 @@ export default {
           click: {
             stroke: 'steelblue',
           }
-        }
+        },
+
+        // 小地图
+        minimap: {
+          size: [100, 100],
+          className: 'minimap',
+          type: 'delegate',
+        },
 
       },
       graphData: {
@@ -147,6 +155,7 @@ export default {
       this.graphData.edges = edges
     },
     graphInit() {
+      this.minimap = new G6.Minimap(this.config.minimap)
       this.graph = new G6.Graph({
         container: 'box',
         width: 1000,
@@ -165,6 +174,10 @@ export default {
         // 状态
         nodeStateStyles: this.config.nodeState,
         edgeStateStyles: this.config.edgeState,
+        // 插件
+        plugins: [
+            this.minimap
+        ]
       })
 
       // 加载
@@ -182,14 +195,14 @@ export default {
         const item = e.item
         this.graph.setItemState(item, 'hover', false)
       })
-      // 点击节点
+      // 鼠标点击节点
       this.graph.on('node:click', e => {
         const nodes = this.graph.findAllByState('node', 'click')
         nodes.forEach(item => this.graph.setItemState(item, 'click', false))
         const node = e.item
         this.graph.setItemState(node, 'click', true)
       })
-      // 点击边
+      // 鼠标点击边
       this.graph.on('edge:click', e=>{
         const edges = this.graph.findAllByState('edge', 'click')
         edges.forEach(item => this.graph.setItemState(item, 'click', false))
