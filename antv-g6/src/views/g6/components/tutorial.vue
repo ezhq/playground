@@ -182,6 +182,7 @@ export default {
         container: 'box',
         width: 1000,
         height: 800,
+        animate: true,
 
         // 布局
         // fitView: true,
