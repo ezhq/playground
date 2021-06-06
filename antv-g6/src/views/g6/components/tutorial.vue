@@ -57,12 +57,23 @@ export default {
 
         // 交互
         modes: {
-          default: ['drag-canvas', 'zoom-canvas', 'drag-node', {
-            type: 'tooltip',
-            formatText(model) {
-              return 'label: ' + model.label + '<br/>class: ' + model.class
+          default: [
+            'drag-canvas',
+            'zoom-canvas',
+            'drag-node',
+            {
+              type: 'tooltip',
+              formatText(model) {
+                return 'label: ' + model.label + '<br/>class: ' + model.class
+              },
             },
-          },], // 默认模式
+            {
+              type: 'edge-tooltip',
+              formatText(model) {
+                return `source: ${model.source}<br/>target: ${model.target}<br/>weight: ${model.weight}`
+              }
+            },
+          ], // 默认模式
           edit: [], // 编辑模式
         },
 
