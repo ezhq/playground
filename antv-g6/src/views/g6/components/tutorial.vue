@@ -17,6 +17,7 @@ export default {
       version: G6.Global.version,
       graph: null,
       minimap: null,
+      imageMinimap: null,
       config: {
         // 节点
         node: {
@@ -83,6 +84,10 @@ export default {
           size: [100, 100],
           className: 'minimap',
           type: 'delegate',
+        },
+        imageMinimap:{
+          width: 200,
+          graphImg: 'https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*eD7nT6tmYgAAAAAAAAAAAABkARQnAQ',
         },
 
       },
@@ -156,6 +161,7 @@ export default {
     },
     graphInit() {
       this.minimap = new G6.Minimap(this.config.minimap)
+      // this.imageMinimap = new G6.Minimap(this.config.imageMinimap)
       this.graph = new G6.Graph({
         container: 'box',
         width: 1000,
@@ -176,8 +182,10 @@ export default {
         edgeStateStyles: this.config.edgeState,
         // 插件
         plugins: [
-            this.minimap
+            this.minimap,
+            // this.imageMinimap
         ]
+
       })
 
       // 加载
@@ -210,7 +218,8 @@ export default {
         this.graph.setItemState(edge, 'click', true)
       })
 
-
+      // 更新图片缩略图
+      // this.imageMinimap.updateGraphImage('https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*y8u6Rrc78uIAAAAAAAAAAABkARQnAQ')
     },
   },
 }
