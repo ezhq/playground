@@ -52,6 +52,12 @@ export default {
           // nodeSize: 30,  // 节点大小，未设置节点时候设置此项防止重叠
           linkDistance: 100, // 边长度
         },
+
+        // 交互
+        modes: {
+          default: ['drag-canvas', 'zoom-canvas', 'drag-node'], // 默认模式
+          edit: [], // 编辑模式
+        },
       },
       graphData: {
         nodes: [],
@@ -131,8 +137,12 @@ export default {
         // fitView: true,
         // fitViewPadding: [20, 40, 50, 20],
         layout: this.config.layout, // 布局配置，执行 render() 时候进行计算
+        // 节点
         defaultNode: this.config.node,
+        // 边
         defaultEdge: this.config.edge,
+        // 交互
+        modes: this.config.modes,
       })
 
       // 加载
