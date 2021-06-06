@@ -60,8 +60,7 @@ export default {
           default: ['drag-canvas', 'zoom-canvas', 'drag-node', {
             type: 'tooltip',
             formatText(model) {
-              const text = 'label: ' + model.label + '<br/>class: ' + model.class
-              return text
+              return 'label: ' + model.label + '<br/>class: ' + model.class
             },
           },], // 默认模式
           edit: [], // 编辑模式
@@ -241,6 +240,6 @@ export default {
   color: #545454;
   background-color: rgba(255, 255, 255, 0.9);
   padding: 10px 8px;
-  box-shadow: rgba(174, 174, 174) 0px 0px 10px;
+  box-shadow: rgb(174, 174, 174) 0 0 10px;
 }
 </style>
