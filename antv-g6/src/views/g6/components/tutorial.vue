@@ -58,6 +58,25 @@ export default {
           default: ['drag-canvas', 'zoom-canvas', 'drag-node'], // 默认模式
           edit: [], // 编辑模式
         },
+
+        // 节点状态
+        nodeState: {
+          hover: {
+            fill: 'lightsteelblue',
+          },
+          click: {
+            stroke: '#000',
+            lineWidth: 3,
+          },
+        },
+
+        // 边状态
+        edgeState: {
+          click: {
+            stroke: 'steelblue',
+          }
+        }
+
       },
       graphData: {
         nodes: [],
@@ -143,12 +162,42 @@ export default {
         defaultEdge: this.config.edge,
         // 交互
         modes: this.config.modes,
+        // 状态
+        nodeStateStyles: this.config.nodeState,
+        edgeStateStyles: this.config.edgeState,
       })
 
       // 加载
       this.graph.data(this.graphData)
       // 渲染
       this.graph.render()
+
+      // 鼠标移入节点
+      this.graph.on('node:mouseenter', e => {
+        const item = e.item
+        this.graph.setItemState(item, 'hover', true)
+      })
+      // 鼠标移出节点
+      this.graph.on('node:mouseleave', e => {
+        const item = e.item
+        this.graph.setItemState(item, 'hover', false)
+      })
+      // 点击节点
+      this.graph.on('node:click', e => {
+        const nodes = this.graph.findAllByState('node', 'click')
+        nodes.forEach(item => this.graph.setItemState(item, 'click', false))
+        const node = e.item
+        this.graph.setItemState(node, 'click', true)
+      })
+      // 点击边
+      this.graph.on('edge:click', e=>{
+        const edges = this.graph.findAllByState('edge', 'click')
+        edges.forEach(item => this.graph.setItemState(item, 'click', false))
+        const edge = e.item
+        this.graph.setItemState(edge, 'click', true)
+      })
+
+
     },
   },
 }
