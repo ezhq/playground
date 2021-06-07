@@ -30,7 +30,9 @@ export default {
             label: "开发信息化",
             author: "谢顿",
             progress: "20",
-            next: ['11', '12'],
+            pre:['01'],
+            parent: [],
+            next: ['11', '12', '13'],
             children: [
               {
                 id: '301',
@@ -82,14 +84,17 @@ export default {
   methods: {
     // 数据加载
     async dataLoad() {
-      this.data.main = this.mock.data.res
+      let data = this.mock.data.res
+
+      this.data.main = data
     },
+
 
     // 注册自定义节点
     graphRegister() {
       G6.registerNode('node-main', {
         draw(cfg, group) {
-          const { id, label, author, progress, next } = cfg
+          const { id, label, author, progress, next, pre } = cfg
 
           const configRect = {
             width: 100,
@@ -118,6 +123,7 @@ export default {
             },
           })
 
+          // 名称
           group.addShape('text', {
             attrs: {
               ...configText,
@@ -132,9 +138,74 @@ export default {
             name: 'node-name',
           });
 
-          this.drawLinkPoints(cfg, group)
+          // 上一级按钮
+          if (cfg.pre && cfg.pre.length) {
+            const preBox = group.addShape('rect', {
+              attrs: {
+                x: -configRect.width/2-8,
+                y: -8,
+                width: 16,
+                height: 16,
+                stroke: 'rgba(0, 0, 0, 0.25)',
+                cursor: 'pointer',
+                fill: '#fff',
+              },
+              name: 'pre-box',
+              modelId: cfg.id,
+            })
+
+            const preText = group.addShape('text', {
+              attrs: {
+                x:-configRect.width/2,
+                y: -1,
+                textAlign: 'center',
+                textBaseline: 'middle',
+                text: cfg.pre.length === cfg.parent.length ? '-' : '+',
+                fontSize: 16,
+                cursor: 'pointer',
+                fill: 'rgba(0, 0, 0, 0.25)',
+              },
+              name: 'pre-text',
+              modelId: cfg.id,
+            })
+          }
+
+          // 下一级按钮
+          if (cfg.next && cfg.next.length) {
+            const nextBox = group.addShape('rect', {
+              attrs: {
+                x: configRect.width / 2 - 8,
+                y: -8,
+                width: 16,
+                height: 16,
+                stroke: 'rgba(0, 0, 0, 0.25)',
+                cursor: 'pointer',
+                fill: '#fff',
+              },
+              name: 'next-box',
+              modelId: cfg.id,
+            })
+
+            const nextText = group.addShape('text', {
+              attrs: {
+                x: configRect.width / 2,
+                y: -1,
+                textAlign: 'center',
+                textBaseline: 'middle',
+                text: cfg.next.length === cfg.children.length ? '-' : '+',
+                fontSize: 16,
+                cursor: 'pointer',
+                fill: 'rgba(0, 0, 0, 0.25)',
+              },
+              name: 'next-text',
+              modelId: cfg.id,
+            })
+          }
+
+          // this.drawLinkPoints(cfg, group)
           return rect
         },
+
       }, 'rect')
     },
 
@@ -161,6 +232,9 @@ export default {
         },
         defaultNode: {
           type: 'node-main'
+        },
+        defaultEdge:{
+          type: 'cubic-horizontal'
         },
         // 交互
         modes: [
