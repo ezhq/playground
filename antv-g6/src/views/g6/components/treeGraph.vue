@@ -201,8 +201,8 @@ export default {
                 y: -1,
                 textAlign: 'center',
                 textBaseline: 'middle',
-                // text: collapsed?'+':'-',
-                text: String(collapsed),
+                // text: progress,
+                text: collapsed?'+':'-',
                 fontSize: 16,
                 cursor: 'pointer',
                 fill: 'rgba(0, 0, 0, 0.25)',
@@ -218,8 +218,6 @@ export default {
 
         setState(name, value, item){
           console.log('--->setState: name: ', name)
-          console.log('--->setState: value: ', value)
-          console.log('--->setState: item: ', item)
 
           if (name === 'collapsed'){
             const group = item.getContainer()
@@ -299,13 +297,19 @@ export default {
       this.graph.render()
       // 监听
       const nextClick = e=>{
+
         const id = e.target.get('modelId')
         const item = this.graph.findById(id)
         const nodeModel = item.getModel()
         nodeModel.collapsed = !nodeModel.collapsed
+
+        console.log('--->nextClick: graph: ', this.graph)
+        console.log('--->nextClick: nodeModel: ', nodeModel)
+
         this.graph.layout()
-        this.graph.setItemState(item, 'collapse', nodeModel.collapsed)
+        this.graph.setItemState(item, 'collapsed', nodeModel.collapsed)
       }
+
       this.graph.on('next-text:click', e=>{nextClick(e)})
       this.graph.on('next-box:click', e=>{nextClick(e)})
     },
