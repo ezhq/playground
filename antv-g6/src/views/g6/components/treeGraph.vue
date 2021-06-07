@@ -84,7 +84,16 @@ export default {
   methods: {
     // 数据加载
     async dataLoad() {
-      let data = this.mock.data.res
+      let data = JSON.parse(JSON.stringify(this.mock.data.res))
+      const dataString = JSON.stringify(data)
+      const formatDataString = dataString.replace(/progress/g, `collapsed": true, "progress`)
+      const formatData = JSON.parse(formatDataString)
+
+      console.log('--->dataLoad: data: ', data)
+      console.log('--->dataLoad: formatData: ', formatData)
+
+
+
 
       this.data.main = data
     },
@@ -94,7 +103,7 @@ export default {
     graphRegister() {
       G6.registerNode('node-main', {
         draw(cfg, group) {
-          const { id, label, author, progress, next, pre } = cfg
+          const { id, label, author, progress, collapsed, next, pre } = cfg
 
           const configRect = {
             width: 100,
@@ -192,7 +201,8 @@ export default {
                 y: -1,
                 textAlign: 'center',
                 textBaseline: 'middle',
-                text: cfg.next.length === cfg.children.length ? '-' : '+',
+                // text: collapsed?'+':'-',
+                text: String(collapsed),
                 fontSize: 16,
                 cursor: 'pointer',
                 fill: 'rgba(0, 0, 0, 0.25)',
@@ -206,7 +216,30 @@ export default {
           return rect
         },
 
+        setState(name, value, item){
+          console.log('--->setState: name: ', name)
+          console.log('--->setState: value: ', value)
+          console.log('--->setState: item: ', item)
+
+          if (name === 'collapsed'){
+            const group = item.getContainer()
+            const nextText = group.find(e=>e.get('name')=== 'next-text')
+            if(nextText){
+              if(!value){
+                nextText.attr({
+                  text: '-'
+                })
+              }else{
+                nextText.attr({
+                  text: '+'
+                })
+              }
+            }
+          }
+        },
+
       }, 'rect')
+
     },
 
     // 初始化
@@ -264,6 +297,17 @@ export default {
       this.graph.data(this.data.main)
       // 渲染
       this.graph.render()
+      // 监听
+      const nextClick = e=>{
+        const id = e.target.get('modelId')
+        const item = this.graph.findById(id)
+        const nodeModel = item.getModel()
+        nodeModel.collapsed = !nodeModel.collapsed
+        this.graph.layout()
+        this.graph.setItemState(item, 'collapse', nodeModel.collapsed)
+      }
+      this.graph.on('next-text:click', e=>{nextClick(e)})
+      this.graph.on('next-box:click', e=>{nextClick(e)})
     },
 
     // 添加子节点
@@ -287,6 +331,7 @@ export default {
       // this.graph.addChild(data, 'root')
       this.graph.updateChild(data, '201')
       this.graph.render()
+      this.graph.layout()
     },
   },
 }
