@@ -209,6 +209,7 @@ export default {
           }
         ],
       }
+
       // this.graph.addChild(data, 'root')
       this.graph.updateChild(data, '201')
       this.graph.render()
