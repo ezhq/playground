@@ -2,7 +2,8 @@
   <div>
     <!--<getting-started></getting-started>-->
     <!--<tutorial></tutorial>-->
-    <tree-graph></tree-graph>
+    <!--<tree-graph></tree-graph>-->
+      <view-okr></view-okr>
   </div>
 </template>
 
@@ -12,10 +13,11 @@ import G6 from '@antv/g6'
 import GettingStarted from './components/getting-started'
 import Tutorial from './components/tutorial'
 import TreeGraph from './components/treeGraph'
+import viewOkr from './components/view-okr'
 
 export default {
   name: 'G6Index',
-  components: { Tutorial, GettingStarted,TreeGraph },
+  components: { Tutorial, GettingStarted,TreeGraph, viewOkr },
   data() {
     return {
     }

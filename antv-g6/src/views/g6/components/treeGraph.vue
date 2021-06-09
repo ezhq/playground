@@ -30,7 +30,7 @@ export default {
             label: "开发信息化",
             author: "谢顿",
             progress: "20",
-            pre:['01'],
+            pre: ['01'],
             parent: [],
             next: ['11', '12', '13'],
             children: [
@@ -39,7 +39,7 @@ export default {
                 label: "开发内容信息化",
                 author: "哈定",
                 progress: "50",
-                next: ['111'],
+                next: ['111','222'],
                 children: [
                   {
                     id: '401',
@@ -91,8 +91,6 @@ export default {
 
       console.log('--->dataLoad: data: ', data)
       console.log('--->dataLoad: formatData: ', formatData)
-
-
 
 
       this.data.main = data
@@ -151,7 +149,7 @@ export default {
           if (cfg.pre && cfg.pre.length) {
             const preBox = group.addShape('rect', {
               attrs: {
-                x: -configRect.width/2-8,
+                x: -configRect.width / 2 - 8,
                 y: -8,
                 width: 16,
                 height: 16,
@@ -165,7 +163,7 @@ export default {
 
             const preText = group.addShape('text', {
               attrs: {
-                x:-configRect.width/2,
+                x: -configRect.width / 2,
                 y: -1,
                 textAlign: 'center',
                 textBaseline: 'middle',
@@ -202,7 +200,7 @@ export default {
                 textAlign: 'center',
                 textBaseline: 'middle',
                 // text: progress,
-                text: collapsed?'+':'-',
+                text: collapsed ? `${next.length}` : '-',
                 fontSize: 16,
                 cursor: 'pointer',
                 fill: 'rgba(0, 0, 0, 0.25)',
@@ -216,20 +214,23 @@ export default {
           return rect
         },
 
-        setState(name, value, item){
-          console.log('--->setState: name: ', name)
+        setState(name, value, item) {
+          const nodeData = item._cfg.model
+          console.log('--->setState: nodeData: ', nodeData)
 
-          if (name === 'collapsed'){
+          if (name === 'collapsed') {
             const group = item.getContainer()
-            const nextText = group.find(e=>e.get('name')=== 'next-text')
-            if(nextText){
-              if(!value){
+            const nextText = group.find(e => e.get('name') === 'next-text')
+
+            if (nextText) {
+              if (!value) {
                 nextText.attr({
                   text: '-'
                 })
-              }else{
+              } else {
                 nextText.attr({
-                  text: '+'
+                  // text: '+'
+                  text: `${nodeData.next.length}`
                 })
               }
             }
@@ -254,6 +255,8 @@ export default {
         container: 'box',
         width: 600,
         height: 600,
+        // width: undefined,
+        // height: undefined,
         animate: true,
         fitView: true,
         // 布局
@@ -264,7 +267,7 @@ export default {
         defaultNode: {
           type: 'node-main'
         },
-        defaultEdge:{
+        defaultEdge: {
           type: 'cubic-horizontal'
         },
         // 交互
@@ -296,7 +299,7 @@ export default {
       // 渲染
       this.graph.render()
       // 监听
-      const nextClick = e=>{
+      const nextClick = e => {
 
         const id = e.target.get('modelId')
         const item = this.graph.findById(id)
@@ -310,8 +313,12 @@ export default {
         this.graph.setItemState(item, 'collapsed', nodeModel.collapsed)
       }
 
-      this.graph.on('next-text:click', e=>{nextClick(e)})
-      this.graph.on('next-box:click', e=>{nextClick(e)})
+      this.graph.on('next-text:click', e => {
+        nextClick(e)
+      })
+      this.graph.on('next-box:click', e => {
+        nextClick(e)
+      })
     },
 
     // 添加子节点
@@ -343,6 +350,10 @@ export default {
 <style>
 #box {
   border: 1px solid gray;
+  width: 100%;
+  height: 100%;
+  min-height: 600px;
+  overflow: auto;
 }
 .g6-tooltip {
   border: 1px solid #e2e2e2;
